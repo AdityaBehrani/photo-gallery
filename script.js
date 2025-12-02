@@ -3,21 +3,21 @@
 //    Each object should point to an image in the `photos/` folder.
 const photos = [
     {
-        src: "photos/photo1.jpg",
+        src: "photos/photo1.JPG",
         title: "asdf",
         description: "Soft light spilling across a quiet street just after sunrise.",
         location: "Somewhere, Earth",
         year: "2024"
     },
     {
-        src: "photos/photo2.jpg",
+        src: "photos/photo2.JPG",
         title: "Neon night",
         description: "Rainy streets, neon reflections, and a single passerby.",
         location: "Downtown",
         year: "2023"
     },
     {
-        src: "photos/photo3.jpg",
+        src: "photos/photo3.JPG",
         title: "Quiet horizon",
         description: "Minimalist seascape with a single boat barely visible.",
         location: "Coastline",
