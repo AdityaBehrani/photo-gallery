@@ -1,4 +1,6 @@
-// 1. Your photos array (keep what you already have)
+// === 1. Photos array ===
+// Keep this as-is but with your own titles/descriptions if you want.
+// Just make sure the filenames match exactly.
 const photos = [
     { src: "photos/photo1.JPG", title: "", description: "", location: "", year: "" },
     { src: "photos/photo2.JPG", title: "", description: "", location: "", year: "" },
@@ -65,7 +67,7 @@ const photos = [
     { src: "photos/photo58.JPG", title: "", description: "", location: "", year: "" }
 ];
 
-// 2. DOM elements
+// === 2. DOM elements ===
 const imgEl = document.getElementById("photo-img");
 const titleEl = document.getElementById("photo-title");
 const descEl = document.getElementById("photo-description");
@@ -73,21 +75,22 @@ const locationEl = document.getElementById("photo-location");
 const yearEl = document.getElementById("photo-year");
 const shuffleBtn = document.getElementById("shuffle-btn");
 const yearSpan = document.getElementById("year-span");
-const progressEl = document.getElementById("photo-progress-text");
+const counterEl = document.getElementById("photo-counter-text");
 const celebrationEl = document.getElementById("celebration");
 
-// 3. State
-let currentIndex = -1;          // index into photos[]
-let order = [];                 // shuffled order of indices (0..n-1)
-let orderPos = -1;              // position within 'order'
-let allSeenOnce = false;        // true after we've gone through entire order once
+// === 3. State ===
+let currentIndex = -1;            // current index in photos[]
+let order = [];            // shuffled order of indices
+let orderIndex = 0;             // 0..photos.length-1, pointer into 'order'
+let allSeenOnce = false;         // have we gone through all photos once?
+let seenCount = 0;             // 0..photos.length
 
 // Footer year
 if (yearSpan) {
     yearSpan.textContent = new Date().getFullYear();
 }
 
-// Shuffle helper (Fisher–Yates)
+// === Helpers ===
 function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -96,40 +99,41 @@ function shuffleArray(arr) {
     return arr;
 }
 
-// Initialize the non-repeating order
 function initOrder() {
     order = Array.from({ length: photos.length }, (_, i) => i);
     shuffleArray(order);
-    orderPos = 0;
+    orderIndex = 0;
     allSeenOnce = false;
+    seenCount = 0;
 }
 
-// Update progress text & celebration banner
-function updateProgress() {
-    if (!progressEl) return;
+function updateCounter() {
+    if (!counterEl) return;
 
     if (!allSeenOnce) {
-        // e.g., "7 / 58"
-        progressEl.textContent = `${orderPos + 1} / ${photos.length}`;
+        // show how many unique photos you've seen so far
+        counterEl.textContent = `${seenCount} / ${photos.length}`;
     } else {
-        // In pure random mode, you can keep showing the last count or change text
-        progressEl.textContent = `${photos.length} / ${photos.length}`;
-    }
-
-    if (celebrationEl) {
-        if (!allSeenOnce && orderPos === photos.length - 1) {
-            // Just reached the last unique photo
-            celebrationEl.classList.remove("hidden");
-        } else if (allSeenOnce) {
-            // Celebration stays visible in random mode (or hide it if you prefer)
-            celebrationEl.classList.remove("hidden");
-        } else {
-            celebrationEl.classList.add("hidden");
-        }
+        // cycle complete; keep it at full
+        counterEl.textContent = `${photos.length} / ${photos.length}`;
     }
 }
 
-// Render a photo by direct index into photos[]
+function updateCelebration() {
+    if (!celebrationEl) return;
+
+    if (allSeenOnce) {
+        celebrationEl.classList.remove("hidden");
+    } else {
+        celebrationEl.classList.add("hidden");
+    }
+}
+
+function updateUI() {
+    updateCounter();
+    updateCelebration();
+}
+
 function showPhotoByIndex(index) {
     const photo = photos[index];
     if (!photo) return;
@@ -137,49 +141,47 @@ function showPhotoByIndex(index) {
     imgEl.src = photo.src;
     imgEl.alt = photo.title || "Photo from portfolio";
 
-    titleEl.textContent = photo.title || "Untitled";
+    titleEl.textContent = photo.title || "";
     descEl.textContent = photo.description || "";
     locationEl.textContent = photo.location || "";
     yearEl.textContent = photo.year || "";
 
     currentIndex = index;
-    updateProgress();
+    updateUI();
 }
 
-// Main "next photo" logic
 function showNextPhoto() {
     if (!photos.length) return;
 
-    // If we have not gone through all photos once, follow the shuffled order
+    // First pass: follow shuffled order without repeats
     if (!allSeenOnce) {
-        // Safety: if order is empty for some reason, re-init
-        if (!order.length || orderPos < 0 || orderPos >= order.length) {
-            initOrder();
-        }
-
-        const idx = order[orderPos];
+        const idx = order[orderIndex];
         showPhotoByIndex(idx);
 
-        // If we're at the last element in the order, flag that we've seen all
-        if (orderPos === order.length - 1) {
+        // Update seenCount: index is 0-based, count is 1-based
+        seenCount = orderIndex + 1;
+
+        if (orderIndex === photos.length - 1) {
+            // Just showed the last unique photo
             allSeenOnce = true;
         } else {
-            orderPos += 1;
+            orderIndex += 1;
         }
     } else {
-        // Pure random mode (allow duplicates)
+        // After the first pass, go fully random
         let idx = Math.floor(Math.random() * photos.length);
 
-        // Optional: avoid repeating the exact same photo twice in a row
+        // optional: avoid immediate repeats
         if (photos.length > 1 && idx === currentIndex) {
             idx = (idx + 1) % photos.length;
         }
 
         showPhotoByIndex(idx);
+        seenCount = photos.length; // keep counter at max
     }
 }
 
-// Wire up events
+// === Event wiring ===
 if (shuffleBtn) {
     shuffleBtn.addEventListener("click", showNextPhoto);
 }
@@ -187,16 +189,20 @@ if (imgEl) {
     imgEl.addEventListener("click", showNextPhoto);
 }
 
-// Initial load: start with a shuffled order and show first random photo
+// === Initial load ===
 if (photos.length) {
     initOrder();
-    const firstIdx = order[orderPos];
-    showPhotoByIndex(firstIdx);
 
-    // Advance position for the next click
-    if (orderPos < order.length - 1) {
-        orderPos += 1;
-    } else {
+    // Show the first photo in the shuffled order
+    const firstIdx = order[orderIndex];
+    showPhotoByIndex(firstIdx);
+    seenCount = 1;
+
+    if (orderIndex === photos.length - 1) {
         allSeenOnce = true;
+    } else {
+        orderIndex += 1;
     }
+
+    updateUI();
 }
