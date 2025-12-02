@@ -23,7 +23,6 @@ const photos = [
         location: "Coastline",
         year: "2022"
     }
-    // 👉 Add the rest of your photos here
 ];
 
 const imgEl = document.getElementById("photo-img");
