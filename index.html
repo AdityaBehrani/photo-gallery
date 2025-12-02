@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Aditya’s Photo Randomizer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Optional: a clean Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="page">
+        <header class="header">
+            <h1>Aditya’s Photo Drawer</h1>
+            <p class="subtitle">
+                One photo at a time. Hit shuffle to see something new.
+            </p>
+        </header>
+
+        <main class="content">
+            <section class="photo-card">
+                <div class="photo-wrapper">
+                    <img id="photo-img" src="" alt="Random from portfolio" />
+                </div>
+
+                <div class="photo-info">
+                    <h2 id="photo-title"></h2>
+                    <p id="photo-description"></p>
+                    <p class="photo-meta">
+                        <span id="photo-location"></span>
+                        <span id="photo-year"></span>
+                    </p>
+                </div>
+
+                <button id="shuffle-btn" type="button">
+                    Show another photo
+                </button>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>
+                © <span id="year-span"></span> Aditya Behrani ·
+                <a href="https://github.com/YOUR_GITHUB_USERNAME" target="_blank" rel="noopener noreferrer">
+                    GitHub
+                </a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

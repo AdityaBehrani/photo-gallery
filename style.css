@@ -1,0 +1,180 @@
+/* Global reset-ish */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: radial-gradient(circle at top, #1f2933 0, #020617 55%, #000 100%);
+    color: #e5e7eb;
+}
+
+/* Layout */
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+.subtitle {
+    margin-top: 8px;
+    font-size: 0.95rem;
+    color: #9ca3af;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-card {
+    width: 100%;
+    max-width: 720px;
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 18px;
+    padding: 18px 18px 20px;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(148, 163, 184, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Photo */
+.photo-wrapper {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #020617;
+    max-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* Info */
+.photo-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.photo-info h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.photo-info p {
+    font-size: 0.95rem;
+}
+
+#photo-description {
+    color: #d1d5db;
+    line-height: 1.4;
+}
+
+.photo-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+.photo-meta span::before {
+    content: "• ";
+}
+
+.photo-meta span:first-child::before {
+    content: "";
+}
+
+/* Button */
+#shuffle-btn {
+    margin-top: 6px;
+    align-self: flex-start;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: #22c55e;
+    color: #041016;
+    transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
+}
+
+#shuffle-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 30px rgba(34, 197, 94, 0.5);
+    background: #16a34a;
+}
+
+#shuffle-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.35);
+}
+
+/* Footer */
+.footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.footer a {
+    color: #93c5fd;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive tweaks */
+@media (max-width: 640px) {
+    .page {
+        padding: 16px;
+    }
+
+    .photo-card {
+        padding: 14px 14px 16px;
+    }
+}
