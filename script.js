@@ -4,7 +4,7 @@
 const photos = [
     { src: "photos/photo1.JPG", title: "Kiyomizu-Dera Temple", description: "", location: "Kyoto, Japan", year: "2025" },
     { src: "photos/photo2.JPG", title: "Nijo Castle", description: "", location: "Kyoto, Japan", year: "2025" },
-    { src: "photos/photo3.JPG", title: "Mt. Fuji", description: "", location: "Fuji-Kawaguchigo, Japan", year: "2025" },
+    { src: "photos/photo3.JPG", title: "Mt. Fuji", description: "", location: "Fuji-Kawaguchiko, Japan", year: "2025" },
     { src: "photos/photo4.JPG", title: "Mac and Jeezy", description: "", location: "Haymarket, USA", year: "2021" },
     { src: "photos/photo5.JPG", title: "Frozen Berries", description: "", location: "Haymarket, USA", year: "2020" },
     { src: "photos/photo6.JPG", title: "Ice Queen", description: "", location: "Haymarket, USA", year: "2020" },
@@ -42,13 +42,13 @@ const photos = [
     { src: "photos/photo35.JPG", title: "Kinkakujicho Temple", description: "", location: "Kyoto, Japan", year: "2025" },
     { src: "photos/photo36.JPG", title: "Bonsai", description: "", location: "Kyoto, Japan", year: "2025" },
     { src: "photos/photo37.JPG", title: "Shitennoji Temple", description: "", location: "Osaka, Japan", year: "2025" },
-    { src: "photos/photo38.JPG", title: "Mnokeys Smoking", description: "", location: "Kyoto, Japan", year: "2025" },
+    { src: "photos/photo38.JPG", title: "Monkeys Smoking", description: "", location: "Kyoto, Japan", year: "2025" },
     { src: "photos/photo39.JPG", title: "2 Fish", description: "", location: "Kyoto, Japan", year: "2025" },
     { src: "photos/photo40.JPG", title: "Serenity", description: "", location: "Kyoto, Japan", year: "2025" },
 
     { src: "photos/photo41.JPG", title: "Nijo Castle", description: "", location: "Kyoto, Japan", year: "2025" },
     { src: "photos/photo42.JPG", title: "Capitol Reflecting Pool", description: "", location: "Washington D.C., USA", year: "2024" },
-    { src: "photos/photo43.JPG", title: "Fuji-Kawaguchigo", description: "", location: "Fuji-Kawaguchigo, Japan", year: "2025" },
+    { src: "photos/photo43.JPG", title: "Fuji-Kawaguchiko", description: "", location: "Fuji-Kawaguchiko, Japan", year: "2025" },
     { src: "photos/photo44.JPG", title: "Matcha!!!", description: "", location: "Kyoto, Japan", year: "2025" },
     { src: "photos/photo45.JPG", title: "Tokyo Skyline", description: "", location: "Tokyo, Japan", year: "2025" },
     { src: "photos/photo46.JPG", title: "Reflection 2", description: "", location: "Tokyo, Japan", year: "2025" },
@@ -57,11 +57,11 @@ const photos = [
     { src: "photos/photo49.JPG", title: "Kokyo Gaien National Garden", description: "", location: "Tokyo, Japan", year: "2025" },
     { src: "photos/photo50.JPG", title: "3 Fish", description: "", location: "Tokyo, Japan", year: "2025" },
 
-    { src: "photos/photo51.JPG", title: "Ripples", description: "", location: "Fuji-Kawaguchigo, Japan", year: "2025" },
+    { src: "photos/photo51.JPG", title: "Ripples", description: "", location: "Fuji-Kawaguchiko, Japan", year: "2025" },
     { src: "photos/photo52.JPG", title: "Solitude", description: "", location: "Los Angeles, USA", year: "2024" },
     { src: "photos/photo53.JPG", title: "Meiji Jingu Temple", description: "", location: "Tokyo, Japan", year: "2025" },
     { src: "photos/photo54.JPG", title: "Dume 2", description: "", location: "Malibu, USA", year: "2024" },
-    { src: "photos/photo55.JPG", title: "Lake Kawaguchigo", description: "", location: "Fuji-Kawaguchigo, Japan", year: "2025" },
+    { src: "photos/photo55.JPG", title: "Lake Kawaguchiko", description: "", location: "Fuji-Kawaguchiko, Japan", year: "2025" },
 ];
 
 // === 2. DOM elements ===
@@ -81,6 +81,7 @@ let order = [];            // shuffled order of indices
 let orderIndex = 0;             // 0..photos.length-1, pointer into 'order'
 let allSeenOnce = false;         // have we gone through all photos once?
 let seenCount = 0;             // 0..photos.length
+let preloadedImage = null;
 
 // Footer year
 if (yearSpan) {
@@ -147,6 +148,14 @@ function showPhotoByIndex(index) {
     updateUI();
 }
 
+function preloadNextPhotoIndex(nextIndex) {
+    if (nextIndex < 0 || nextIndex >= photos.length) return;
+
+    const nextPhoto = photos[nextIndex];
+    preloadedImage = new Image();
+    preloadedImage.src = nextPhoto.src;
+}
+
 function showNextPhoto() {
     if (!photos.length) return;
 
@@ -155,26 +164,36 @@ function showNextPhoto() {
         const idx = order[orderIndex];
         showPhotoByIndex(idx);
 
-        // Update seenCount: index is 0-based, count is 1-based
         seenCount = orderIndex + 1;
 
+        // Preload upcoming one in the sequence (if any)
+        const nextPos = orderIndex + 1;
+        if (nextPos < order.length) {
+            preloadNextPhotoIndex(order[nextPos]);
+        }
+
         if (orderIndex === photos.length - 1) {
-            // Just showed the last unique photo
             allSeenOnce = true;
         } else {
             orderIndex += 1;
         }
     } else {
-        // After the first pass, go fully random
+        // After first pass: fully random
         let idx = Math.floor(Math.random() * photos.length);
-
-        // optional: avoid immediate repeats
         if (photos.length > 1 && idx === currentIndex) {
             idx = (idx + 1) % photos.length;
         }
 
         showPhotoByIndex(idx);
-        seenCount = photos.length; // keep counter at max
+
+        // Optional: preload a fresh random next one (not equal to idx if >1)
+        let nextIdx = Math.floor(Math.random() * photos.length);
+        if (photos.length > 1 && nextIdx === idx) {
+            nextIdx = (nextIdx + 1) % photos.length;
+        }
+        preloadNextPhotoIndex(nextIdx);
+
+        seenCount = photos.length;
     }
 }
 
