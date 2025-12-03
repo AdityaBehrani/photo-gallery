@@ -84,6 +84,7 @@ body {
     max-height: 60vh;
     object-fit: contain;
     display: block;
+    image-orientation: from-image;
 }
 
 /* Info */
