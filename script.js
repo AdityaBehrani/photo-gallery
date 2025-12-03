@@ -150,6 +150,7 @@ function showPhotoByIndex(index) {
 
 function preloadNextPhotoIndex(nextIndex) {
     if (nextIndex < 0 || nextIndex >= photos.length) return;
+    console.log("getting next image")
 
     const nextPhoto = photos[nextIndex];
     preloadedImage = new Image();
@@ -164,7 +165,7 @@ function showNextPhoto() {
         const idx = order[orderIndex];
         showPhotoByIndex(idx);
 
-        seenCount = orderIndex + 1;
+        seenCount += 1;
 
         // Preload upcoming one in the sequence (if any)
         const nextPos = orderIndex + 1;
