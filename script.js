@@ -18,7 +18,6 @@ const photos = [
     { src: "photos/photo13.JPG", title: "Simon Closeup", description: "", location: "West Lafayette, USA", year: "2022" },
     { src: "photos/photo14.JPG", title: "40k Viewed on Google Maps", description: "", location: "Lafayette, USA", year: "2022" },
     { src: "photos/photo15.JPG", title: "Field of Views", description: "", location: "Lafayette, USA", year: "2022" },
-    { src: "photos/photo16.JPG", title: "Solo Leafing", description: "", location: "West Lafayette, USA", year: "2022" },
     { src: "photos/photo17.JPG", title: "Harbor", description: "", location: "National Harbor, USA", year: "2022" },
     { src: "photos/photo18.JPG", title: "2 Suns", description: "", location: "National Harbor, USA", year: "2022" },
     { src: "photos/photo19.JPG", title: "Play (above) ground", description: "", location: "Chicago, USA", year: "2023" },
