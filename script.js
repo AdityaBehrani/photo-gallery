@@ -64,31 +64,64 @@ const photos = [
     { src: "photos/photo55.JPG", title: "Lake Kawaguchiko", description: "", location: "Fuji-Kawaguchiko, Japan", year: "2025" },
 ];
 
-// === 2. DOM elements ===
-const imgEl = document.getElementById("photo-img");
-const titleEl = document.getElementById("photo-title");
-const descEl = document.getElementById("photo-description");
-const locationEl = document.getElementById("photo-location");
-const yearEl = document.getElementById("photo-year");
-const shuffleBtn = document.getElementById("shuffle-btn");
-const yearSpan = document.getElementById("year-span");
-const counterEl = document.getElementById("photo-counter-text");
-const celebrationEl = document.getElementById("celebration");
+// ============================================================================
+// RANDOM PHOTO GALLERY
+// ============================================================================
 
-// === 3. State ===
-let currentIndex = -1;            // current index in photos[]
-let order = [];            // shuffled order of indices
-let orderIndex = 0;             // 0..photos.length-1, pointer into 'order'
-let allSeenOnce = false;         // have we gone through all photos once?
-let seenCount = 0;             // 0..photos.length
-let preloadedImage = null;
+// === DOM Elements ===
+const elements = {
+    img: document.getElementById("photo-img"),
+    title: document.getElementById("photo-title"),
+    description: document.getElementById("photo-description"),
+    location: document.getElementById("photo-location"),
+    year: document.getElementById("photo-year"),
+    shuffleBtn: document.getElementById("shuffle-btn"),
+    counter: document.getElementById("photo-counter-text"),
+    celebration: document.getElementById("celebration"),
+    yearSpan: document.getElementById("year-span")
+};
 
-// Footer year
-if (yearSpan) {
-    yearSpan.textContent = new Date().getFullYear();
+// === State Management ===
+const state = {
+    currentIndex: -1,
+    shuffledOrder: [],
+    orderPosition: 0,
+    completedFirstCycle: false,
+    uniquePhotosSeen: 0
+};
+
+// === Initialization ===
+function init() {
+    setFooterYear();
+    createShuffledOrder();
+    setupEventListeners();
+    showFirstPhoto();
 }
 
-// === Helpers ===
+function setFooterYear() {
+    if (elements.yearSpan) {
+        elements.yearSpan.textContent = new Date().getFullYear();
+    }
+}
+
+function createShuffledOrder() {
+    state.shuffledOrder = Array.from({ length: photos.length }, (_, i) => i);
+    shuffleArray(state.shuffledOrder);
+    state.orderPosition = 0;
+    state.completedFirstCycle = false;
+    state.uniquePhotosSeen = 0;
+}
+
+function setupEventListeners() {
+    if (elements.shuffleBtn) {
+        elements.shuffleBtn.addEventListener("click", showNextPhoto);
+    }
+    if (elements.img) {
+        elements.img.addEventListener("click", showNextPhoto);
+    }
+}
+
+// === Utility Functions ===
 function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -97,135 +130,121 @@ function shuffleArray(arr) {
     return arr;
 }
 
-function initOrder() {
-    order = Array.from({ length: photos.length }, (_, i) => i);
-    shuffleArray(order);
-    orderIndex = 0;
-    allSeenOnce = false;
-    seenCount = 0;
+function getRandomIndex(exclude = -1) {
+    if (photos.length === 1) return 0;
+
+    let index;
+    do {
+        index = Math.floor(Math.random() * photos.length);
+    } while (index === exclude);
+
+    return index;
 }
 
-function updateCounter() {
-    if (!counterEl) return;
-
-    if (!allSeenOnce) {
-        // show how many unique photos you've seen so far
-        counterEl.textContent = `${seenCount} / ${photos.length}`;
-    } else {
-        // cycle complete; keep it at full
-        counterEl.textContent = `${photos.length} / ${photos.length}`;
-    }
-}
-
-function updateCelebration() {
-    if (!celebrationEl) return;
-
-    if (allSeenOnce) {
-        celebrationEl.classList.remove("hidden");
-    } else {
-        celebrationEl.classList.add("hidden");
-    }
-}
-
-function updateUI() {
-    updateCounter();
-    updateCelebration();
-}
-
-function showPhotoByIndex(index) {
+// === Photo Display ===
+function displayPhoto(index) {
     const photo = photos[index];
     if (!photo) return;
 
-    imgEl.src = photo.src;
-    imgEl.alt = photo.title || "Photo from portfolio";
+    elements.img.src = photo.src;
+    elements.img.alt = photo.title || "Photo from portfolio";
+    elements.title.textContent = photo.title || "";
+    elements.description.textContent = photo.description || "";
+    elements.location.textContent = photo.location || "";
+    elements.year.textContent = photo.year || "";
 
-    titleEl.textContent = photo.title || "";
-    descEl.textContent = photo.description || "";
-    locationEl.textContent = photo.location || "";
-    yearEl.textContent = photo.year || "";
-
-    currentIndex = index;
-    updateUI();
+    state.currentIndex = index;
 }
 
-function preloadNextPhotoIndex(nextIndex) {
-    if (nextIndex < 0 || nextIndex >= photos.length) return;
-    console.log("getting next image")
+function preloadImage(index) {
+    if (index < 0 || index >= photos.length) return;
 
-    const nextPhoto = photos[nextIndex];
-    preloadedImage = new Image();
-    preloadedImage.src = nextPhoto.src;
+    const img = new Image();
+    img.src = photos[index].src;
 }
 
 function showNextPhoto() {
     if (!photos.length) return;
 
-    // First pass: follow shuffled order without repeats
-    if (!allSeenOnce) {
-        const idx = order[orderIndex];
-        showPhotoByIndex(idx);
-
-        seenCount += 1;
-
-        // Preload upcoming one in the sequence (if any)
-        const nextPos = orderIndex + 1;
-        if (nextPos < order.length) {
-            preloadNextPhotoIndex(order[nextPos]);
-        }
-
-        if (orderIndex === photos.length - 1) {
-            allSeenOnce = true;
-        } else {
-            orderIndex += 1;
-        }
+    if (!state.completedFirstCycle) {
+        showNextInSequence();
     } else {
-        // After first pass: fully random
-        let idx = Math.floor(Math.random() * photos.length);
-        if (photos.length > 1 && idx === currentIndex) {
-            idx = (idx + 1) % photos.length;
-        }
-
-        showPhotoByIndex(idx);
-
-        // Optional: preload a fresh random next one (not equal to idx if >1)
-        let nextIdx = Math.floor(Math.random() * photos.length);
-        if (photos.length > 1 && nextIdx === idx) {
-            nextIdx = (nextIdx + 1) % photos.length;
-        }
-        preloadNextPhotoIndex(nextIdx);
-
-        seenCount = photos.length;
-    }
-}
-
-// === Event wiring ===
-if (shuffleBtn) {
-    shuffleBtn.addEventListener("click", showNextPhoto);
-}
-if (imgEl) {
-    imgEl.addEventListener("click", showNextPhoto);
-}
-
-// === Initial load ===
-if (photos.length) {
-    initOrder();
-
-    // Show the first photo in the shuffled order
-    const firstIdx = order[orderIndex];
-    showPhotoByIndex(firstIdx);
-    seenCount = 1;
-
-    if (orderIndex === photos.length - 1) {
-        allSeenOnce = true;
-    } else {
-        orderIndex += 1;
+        showRandomPhoto();
     }
 
     updateUI();
 }
 
+function showNextInSequence() {
+    const photoIndex = state.shuffledOrder[state.orderPosition];
+    displayPhoto(photoIndex);
+    state.uniquePhotosSeen++;
 
+    // Preload next photo in sequence
+    const nextPosition = state.orderPosition + 1;
+    if (nextPosition < state.shuffledOrder.length) {
+        preloadImage(state.shuffledOrder[nextPosition]);
+    }
 
+    // Check if we've completed the first cycle
+    if (state.orderPosition === photos.length - 1) {
+        state.completedFirstCycle = true;
+    } else {
+        state.orderPosition++;
+    }
+}
+
+function showRandomPhoto() {
+    const photoIndex = getRandomIndex(state.currentIndex);
+    displayPhoto(photoIndex);
+
+    // Preload another random photo
+    preloadImage(getRandomIndex(photoIndex));
+}
+
+function showFirstPhoto() {
+    if (!photos.length) return;
+
+    const firstIndex = state.shuffledOrder[0];
+    displayPhoto(firstIndex);
+    state.uniquePhotosSeen = 1;
+
+    if (photos.length === 1) {
+        state.completedFirstCycle = true;
+    } else {
+        state.orderPosition = 1;
+    }
+
+    updateUI();
+}
+
+// === UI Updates ===
+function updateUI() {
+    updateCounter();
+    updateCelebration();
+}
+
+function updateCounter() {
+    if (!elements.counter) return;
+
+    const count = state.completedFirstCycle ? photos.length : state.uniquePhotosSeen;
+    elements.counter.textContent = `${count} / ${photos.length}`;
+}
+
+function updateCelebration() {
+    if (!elements.celebration) return;
+
+    if (state.completedFirstCycle) {
+        elements.celebration.classList.remove("hidden");
+    } else {
+        elements.celebration.classList.add("hidden");
+    }
+}
+
+// === Start the Gallery ===
+if (photos.length) {
+    init();
+}
 /**
  * Descriptions for all the photos
  * bottom banner gets fucked up when the photos resize
