@@ -229,9 +229,6 @@ body {
     animation: pop-in 0.3s ease-out;
 }
 
-.hidden {
-    display: none;
-}
 
 @keyframes pop-in {
     from {
@@ -243,4 +240,8 @@ body {
         transform: scale(1);
         opacity: 1;
     }
+}
+
+.hidden {
+    display: none;
 }
