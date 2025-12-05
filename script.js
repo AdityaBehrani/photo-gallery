@@ -18,6 +18,7 @@ const photos = [
     { src: "photos/photo13.webp", title: "Simon Closeup", description: "", location: "West Lafayette, USA", year: "2022" },
     { src: "photos/photo14.webp", title: "40k Viewed on Google Maps", description: "", location: "Lafayette, USA", year: "2022" },
     { src: "photos/photo15.webp", title: "Field of Views", description: "", location: "Lafayette, USA", year: "2022" },
+    { src: "photos/photo16.webp", title: "Silver Arrows", description: "", location: "Haymarket, USA", year: "2025" },
     { src: "photos/photo17.webp", title: "Harbor", description: "", location: "National Harbor, USA", year: "2022" },
     { src: "photos/photo18.webp", title: "2 Suns", description: "", location: "National Harbor, USA", year: "2022" },
     { src: "photos/photo19.webp", title: "Play (above) ground", description: "", location: "Chicago, USA", year: "2023" },
@@ -62,6 +63,7 @@ const photos = [
     { src: "photos/photo54.webp", title: "Dume 2", description: "", location: "Malibu, USA", year: "2024" },
     { src: "photos/photo55.webp", title: "Lake Kawaguchiko", description: "", location: "Fuji-Kawaguchiko, Japan", year: "2025" },
 ];
+
 
 // ============================================================================
 // RANDOM PHOTO GALLERY
@@ -246,6 +248,4 @@ if (photos.length) {
 }
 /**
  * Descriptions for all the photos
- * bottom banner gets fucked up when the photos resize
- * clean up any code
  */
