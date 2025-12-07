@@ -1,6 +1,4 @@
 // === 1. Photos array ===
-// Keep this as-is but with your own titles/descriptions if you want.
-// Just make sure the filenames match exactly.
 const photos = [
     { src: "photos/photo1.webp", title: "Kiyomizu-Dera Temple", description: "", location: "Kyoto, Japan", year: "2025" },
     { src: "photos/photo2.webp", title: "Nijo Castle", description: "", location: "Kyoto, Japan", year: "2025" },
@@ -246,6 +244,7 @@ function updateCelebration() {
 if (photos.length) {
     init();
 }
-/**
+/
+/** TODO
  * Descriptions for all the photos
  */
