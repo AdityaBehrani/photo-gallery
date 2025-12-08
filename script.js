@@ -18,7 +18,7 @@ const photos = [
     { src: "photos/photo15.webp", title: "Field of Views", description: "", location: "Lafayette, USA", year: "2022" },
     { src: "photos/photo16.webp", title: "Silver Arrows", description: "", location: "Haymarket, USA", year: "2025" },
     { src: "photos/photo17.webp", title: "Harbor", description: "", location: "National Harbor, USA", year: "2022" },
-    { src: "photos/photo18.webp", title: "2 Suns", description: "", location: "National Harbor, USA", year: "2022" },
+    { src: "photos/photo18.webp", title: "Alpha Centauri", description: "", location: "National Harbor, USA", year: "2022" },
     { src: "photos/photo19.webp", title: "Play (above) ground", description: "", location: "Chicago, USA", year: "2023" },
     { src: "photos/photo20.webp", title: "Embers", description: "Did you really think I was going to name it anything else?", location: "Haymarket, USA", year: "2023" },
 
@@ -48,7 +48,7 @@ const photos = [
     { src: "photos/photo42.webp", title: "Capitol Reflecting Pool", description: "", location: "Washington D.C., USA", year: "2024" },
     { src: "photos/photo43.webp", title: "Fuji-Kawaguchiko", description: "", location: "Fuji-Kawaguchiko, Japan", year: "2025" },
     { src: "photos/photo44.webp", title: "Matcha!!!", description: "", location: "Kyoto, Japan", year: "2025" },
-    { src: "photos/photo45.webp", title: "Tokyo Skyline", description: "", location: "Tokyo, Japan", year: "2025" },
+    { src: "photos/photo45.webp", title: "An R34's Skyline", description: "", location: "Tokyo, Japan", year: "2025" },
     { src: "photos/photo46.webp", title: "Reflection 2", description: "", location: "Tokyo, Japan", year: "2025" },
     { src: "photos/photo47.webp", title: "Rainbow", description: "", location: "Tokyo, Japan", year: "2025" },
     { src: "photos/photo48.webp", title: "In Plain Sight", description: "", location: "Washington D.C., USA", year: "2024" },
