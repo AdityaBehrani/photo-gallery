@@ -244,7 +244,7 @@ function updateCelebration() {
 if (photos.length) {
     init();
 }
-/
+
 /** TODO
  * Descriptions for all the photos
  */
