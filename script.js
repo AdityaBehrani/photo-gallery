@@ -60,6 +60,13 @@ const photos = [
     { src: "photos/photo53.webp", title: "Meiji Jingu Temple", description: "", location: "Tokyo, Japan", year: "2025" },
     { src: "photos/photo54.webp", title: "Dume 2", description: "", location: "Malibu, USA", year: "2024" },
     { src: "photos/photo55.webp", title: "Lake Kawaguchiko", description: "", location: "Fuji-Kawaguchiko, Japan", year: "2025" },
+    { src: "photos/photo56.webp", title: "Tiki Torched", description: "", location: "Grand Bahama, The Bahamas", year: "2025" },
+    { src: "photos/photo57.webp", title: "Sacred Palms", description: "", location: "Grand Bahama, The Bahamas", year: "2025" },
+    { src: "photos/photo58.webp", title: "Rock", description: "", location: "Grand Bahama, The Bahamas", year: "2025" },
+    { src: "photos/photo59.webp", title: "Cotton Candy", description: "", location: "The Atlantic", year: "2025" },
+    { src: "photos/photo60.webp", title: "Coffee and Afro Beats", description: "", location: "The Atlantic", year: "2025" },
+
+    { src: "photos/photo61.webp", title: "Aerial", description: "", location: "IDK", year: "2025" },
 ];
 
 
